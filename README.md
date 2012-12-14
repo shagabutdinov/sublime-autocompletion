@@ -15,26 +15,27 @@ Features
 
 - Any part of word completion start - change current word with completioning it from any part (example completion list for o|rder: [ occurence, order, ... ] )
 
+- Tests not cover all features - be careful with pulling and modifying (I used tests because I've never used python before and it was much easier to code with tests than without)
 
 Configuration
 -------------
 
 This is my preferred completion configuration. Add it to your ".sublime-keymap" to start using the plugin.
 
-    $ { "keys": ["ctrl+]"], "command": "anyword_completion", "context":
-    $   [
-    $     { "key": "num_selections", "operator": "equal", "operand": 1 },
-    $     { "key": "overlay_visible", "operator": "equal", "operand": false },
-    $     { "key": "panel_visible", "operator": "equal", "operand": false }
-    $   ]
-    $ },
-    $ { "keys": ["ctrl+["], "command": "anyword_completion", "args": { "direction": "desc" }, "context":
-    $   [
-    $     { "key": "num_selections", "operator": "equal", "operand": 1 },
-    $     { "key": "overlay_visible", "operator": "equal", "operand": false },
-    $     { "key": "panel_visible", "operator": "equal", "operand": false }
-    $   ]
-    $ }
+    { "keys": ["ctrl+]"], "command": "anyword_completion", "context":
+      [
+        { "key": "num_selections", "operator": "equal", "operand": 1 },
+        { "key": "overlay_visible", "operator": "equal", "operand": false },
+        { "key": "panel_visible", "operator": "equal", "operand": false }
+      ]
+    },
+    { "keys": ["ctrl+["], "command": "anyword_completion", "args": { "direction": "desc" }, "context":
+      [
+        { "key": "num_selections", "operator": "equal", "operand": 1 },
+        { "key": "overlay_visible", "operator": "equal", "operand": false },
+        { "key": "panel_visible", "operator": "equal", "operand": false }
+      ]
+    }
 
 
 TODO
