@@ -15,6 +15,11 @@ Features
 
 - Any part of word completion start - change current word with completioning it from any part (example completion list for o|rder: [ occurence, order, ... ] )
 
+- (upd oct 2013) All opened files are used for build completion list. You can complete word in current file with words of previous/next files. Same rules that listed above are applied for several-files completion.
+
+IMPORTANT NOTICE
+----------------
+
 - Tests not cover all features - be careful with pulling and modifying (I used tests because I've never used python before and it was much easier to code with tests than without)
 
 Configuration
