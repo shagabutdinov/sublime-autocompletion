@@ -2,19 +2,80 @@ import re
 
 class Autocompletion():
 
-  def get_completion(self, texts, current_text_index, current_cursor_position,
-      direction_desc = False, state = None):
-    word = self._get_word_for_completion(texts[current_text_index],
-      current_cursor_position)
+  def __init__(self):
+    self.types = {
+      "words": '(?:[^_\w]|^)(__WORD__[\w]+)',
+      "subwords": '(?:[^\w]|_|[A-Z]|^)(__WORD__[\w]?)(?:_|[A-Z]|$)',
+      "line": '(?:[^\w]|^)(__WORD__.*)',
+    }
 
-    reset_state = (state is None or 'completion_last' not in state or
-      state['completion_last'] != word)
+  def get_completion(self, texts, text_index, position, regexps, desc = False,
+    state = None):
+
+    text = texts[text_index]
+    insert_positions = self._get_insert_positions(text, position, regexps)
+    state, state_resetted = self._get_updated_state(texts, text_index, position,
+      regexps, state, desc)
+
+    if state_resetted:
+      state['start_position'] = insert_positions[0]
+
+    if state['completion_last']:
+      state['last_position'] = state['start_position'] + len(state['completion_last'])
+
+    return {
+      'state': state,
+      'completion': state['completion_last'],
+      'change_start_position': state['start_position'],
+      'change_end_position': position,
+    }
+
+  def _get_regexps(self, regexps):
+    if regexps == None:
+      result = {
+        'search': '(?:[^_\w]|^)(__WORD__[\w]+)',
+      }
+    elif type(regexps) is dict:
+      result = regexps
+    else:
+      result = {
+        'search': regexps,
+      }
+
+    if not ('word' in result):
+      result['word'] = '([\w]+)\Z'
+
+    return result
+
+  def create_empty_state(self):
+    return self._get_completion_state([''], 0, 0, None, 'asc')
+
+  def _get_updated_state(self, texts, text_index, position, regexps, state,
+      desc):
+
+    text = texts[text_index]
+    last_position = 'last_position' in state and state['last_position']
+    last_completion = 'completion_last' in state and state['completion_last']
+
+    current = None
+    if last_position and last_completion:
+      current = text[last_position - len(last_completion):last_position]
+
+    reset_state = (
+      state is None or
+      'last_regexps' not in state or
+      state['last_regexps'] != regexps or
+      last_position != position or
+      current != last_completion
+    )
 
     if reset_state:
-      state = self._get_completion_state(texts, current_text_index,
-        current_cursor_position, direction_desc)
+      state = self._get_completion_state(texts, text_index, position, regexps,
+        desc)
 
-    if direction_desc:
+    state['last_regexps'] = regexps
+
+    if desc:
       state['completion_position'] -= 1
     else:
       state['completion_position'] += 1
@@ -28,115 +89,82 @@ class Autocompletion():
     completion = state['completions'][state['completion_position']]
     state['completion_last'] = completion
 
-    position_start = self._get_completion_insert_position(
-      texts[current_text_index], current_cursor_position)
-    word_under_cursor = self._get_word_under_cursor(
-      texts[current_text_index], current_cursor_position)
-    position_end = None
+    return [state, reset_state]
 
-    if position_start is not None and word_under_cursor is not None:
-      position_end = position_start + len(word_under_cursor)
+  def _get_completion_state(self, texts, text_index, position, regexps, desc):
+    word = self._get_word(texts[text_index], position, regexps)
 
-    return {
-      'state': state,
-      'completion': completion,
-      'change_start_position': position_start,
-      'change_end_position': position_end
-    }
+    completions_desc, completions_asc = [], []
 
-  def create_empty_state(self):
-    return self._get_completion_state([''], 0, 0)
-
-  def _get_completion_state(self, texts, current_text_index,
-      current_cursor_position, direction_desc = False):
-    word = self._get_word_for_completion(texts[current_text_index],
-      current_cursor_position)
-    word_under_cursor = self._get_word_under_cursor(texts[current_text_index],
-      current_cursor_position)
-
-    completions_desc = self._get_completion_list(texts, current_text_index,
-      current_cursor_position, True) or []
-    completions_asc = self._get_completion_list(texts, current_text_index,
-      current_cursor_position, False) or []
+    if word:
+      completions_desc = self._get_completion_list(texts, text_index, position,
+        word, regexps, True)
+      completions_asc = self._get_completion_list(texts, text_index, position,
+        word, regexps, False)
 
     return {
-      'current_cursor_position': current_cursor_position,
+      'position': position,
       'word': word,
-      'completions': completions_desc + [word_under_cursor] + completions_asc,
+      'completions': completions_desc + [word] + completions_asc,
       'completion_position': len(completions_desc)
     }
 
-  def _get_completion_list(self, texts, current_text_index,
-      current_cursor_position, direction_desc = False):
-    text = texts[current_text_index]
-    word = self._get_word_for_completion(text, current_cursor_position)
-    if word is None:
-      return None
+  def _get_completion_list(self, texts, text_index, position, word, regexps, desc):
+    text = self._get_joined_text(texts, text_index, position, desc)
+    return self._get_completion_list_by_word(text, word, regexps, desc)
 
-    text_prepared = self._get_text_prepared_for_completion_extraction(texts,
-      current_text_index, current_cursor_position, direction_desc)
-
-    return self._get_completion_list_by_word(text_prepared, word,
-      direction_desc)
-
-  def _get_text_prepared_for_completion_extraction(self, texts,
-      current_text_index, current_cursor_position, direction_desc = False):
-    if direction_desc:
-      cursor_position = len(' '.join(texts[: current_text_index + 1])) + \
-      current_cursor_position - len(texts[current_text_index])
-      result = ' '.join(texts[: current_text_index + 1])[: cursor_position]
+  def _get_joined_text(self, texts, text_index, position, desc = False):
+    if desc:
+      cursor_position = len(' '.join(texts[: text_index + 1])) + \
+      position - len(texts[text_index])
+      result = ' '.join(texts[: text_index + 1])[: cursor_position]
     else:
-      result = ' '.join(texts[current_text_index :])[current_cursor_position :]
+      result = ' '.join(texts[text_index :])[position :]
 
     return result
 
-  def _get_completion_list_by_word(self, text, word, direction_desc = False):
-    words = re.findall(r'(?:[^\w\d]|^)(' + re.escape(word) + r'[\w\d]+)', text,
-      re.M | re.U)
+  def _get_completion_list_by_word(self, text, word, regexps, desc = False):
+    regexp_string = self._get_regexps(regexps)['search'].\
+      replace('__WORD__', word)
 
-    if direction_desc:
+    regexp = re.compile(regexp_string)
+    words = re.findall(regexp, text)
+
+    if desc:
       words.reverse()
 
     words = self.__uniq(words)
 
-    if direction_desc:
+    if desc:
       words.reverse()
 
     return words
 
-  def _get_word_for_completion(self, text, current_cursor_position):
-    start_position = self._get_completion_insert_position(text,
-      current_cursor_position)
-    if start_position is None:
-      return None
-
-    return text[start_position : current_cursor_position]
-
-  def _get_word_under_cursor(self, text, current_cursor_position):
-    start_position = self._get_completion_insert_position(text,
-      current_cursor_position)
+  def _get_word(self, text, position, regexps):
+    start_position = self._get_completion_insert_position(text, position,
+      regexps)
 
     if start_position is None:
       return None
 
-    end_position = re_result = re.search(r'\A([\w\d_]+)',
-      text[current_cursor_position :], re.M | re.U)
+    return text[start_position:position]
 
-    if end_position is None:
-      end_position = current_cursor_position
-    else:
-      end_position = end_position.end(0) + current_cursor_position
-
-    return text[start_position : end_position]
-
-  def _get_completion_insert_position(self, text, current_cursor_position):
-    re_result = re.search(r'([\w\d_]+)\Z', text[: current_cursor_position],
-      re.M | re.U)
+  def _get_completion_insert_position(self, text, position, regexps):
+    regexp = re.compile(self._get_regexps(regexps)['word'])
+    re_result = re.search(regexp, text[:position])
 
     if re_result is None:
       return None
 
     return re_result.start(0)
+
+  def _get_insert_positions(self, text, position, regexps):
+    position_start = self._get_completion_insert_position(text, position,
+      regexps)
+
+    word_under_cursor = self._get_word(text, position, regexps)
+
+    return [position_start, position]
 
   def __uniq(self, list):
     seen = set()
