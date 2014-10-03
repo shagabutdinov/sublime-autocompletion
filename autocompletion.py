@@ -1,172 +1,181 @@
-import re
+import sublime
+import sublime_plugin
+import importlib
 
-class Autocompletion():
+clean_required = False
+_completion = None
 
-  def __init__(self):
-    self.types = {
-      "words": '(?:[^_\w]|^)(__WORD__[\w]+)',
-      "subwords": '(?:[^\w]|_|[A-Z]|^)(__WORD__[\w]?)(?:_|[A-Z]|$)',
-      "line": '(?:[^\w]|^)(__WORD__.*)',
-    }
+def _set_current_completion(completion):
+  global _completion
+  _completion = completion
 
-  def get_completion(self, texts, text_index, position, regexps, desc = False,
-    state = None):
+def _get_current_completion():
+  global _completion
+  return _completion
 
-    text = texts[text_index]
-    insert_positions = self._get_insert_positions(text, position, regexps)
-    state, state_resetted = self._get_updated_state(texts, text_index, position,
-      regexps, state, desc)
+def _call_handler(handler, **args):
+  module_name, method_name = handler.rsplit('.', 1)
+  module = importlib.import_module(module_name)
+  result = getattr(module, method_name)(**args)
+  return result
 
-    if state_resetted:
-      state['start_position'] = insert_positions[0]
+def _create_completion(handler, view, backward, args = {}):
+  handler_args = args.copy()
+  handler_args.update({
+    'backward': backward,
+    'view': view
+  })
 
-    if state['completion_last']:
-      state['last_position'] = state['start_position'] + len(state['completion_last'])
+  completions = _call_handler(handler, **handler_args)
+  if completions == None:
+    return None
 
-    return {
-      'state': state,
-      'completion': state['completion_last'],
-      'change_start_position': state['start_position'],
-      'change_end_position': position,
-    }
+  completion = {
+    'type': handler + str(args),
+    'backward': backward,
+    'current': 0,
+    'completions': completions,
+    'position': view.sel()[0].b - len(completions[0]['completion']),
+  }
 
-  def _get_regexps(self, regexps):
-    if regexps == None:
-      result = {
-        'search': '(?:[^_\w]|^)(__WORD__[\w]+)',
-      }
-    elif type(regexps) is dict:
-      result = regexps
+  return completion
+
+class Autocompletion(sublime_plugin.TextCommand):
+  def run(self, edit, handler, backward = True, **args):
+    sels = self.view.sel()
+    if len(sels) == 0:
+      return
+
+    completion = _get_current_completion()
+    if self._is_new_completion_needed(handler, completion, backward, args):
+      completion = _create_completion(handler, self.view, backward, args)
+      if completion == None:
+        return
+      _set_current_completion(completion)
+      self._highlight(completion)
+
+    current_index, current, new = self._get_backward_completion(completion,
+      backward)
+
+    for selection in sels:
+      self._complete(edit, completion, selection, current_index, current, new,
+        backward)
+
+    self._highlight_current(completion)
+
+  def _is_new_completion_needed(self, handler, completion, backward, args):
+    if completion == None:
+      return True
+
+    if completion['type'] != handler + str(args):
+      return True
+
+    _is_completion_valid = self._is_completion_valid(completion,
+      self.view.sel()[0], completion['current'], backward)
+
+    if not _is_completion_valid:
+      return True
+
+    current = completion['completions'][completion['current']]['completion']
+    if self.view.sel()[0].b - len(current) != completion['position']:
+      return True
+
+    return False
+
+  def _is_completion_valid(self, completion, selection, index, backward):
+    if index == 0:
+      if not completion['backward'] and backward:
+        return False
+
+      if completion['backward'] and not backward:
+        return False
+
+    current = completion['completions'][index]['completion']
+    region = sublime.Region(selection.b - len(current), selection.b)
+    last = self.view.substr(region)
+
+    return last == current
+
+  def _get_backward_completion(self, completion, backward):
+    current_index = completion['current']
+    current = completion['completions'][current_index]['completion']
+
+    if completion['backward']:
+      backward = not backward
+
+    if backward:
+      completion['current'] -= 1
+      if completion['current'] < 0:
+        completion['current'] = 0
     else:
-      result = {
-        'search': regexps,
-      }
+      completion['current'] += 1
+      if completion['current'] > len(completion['completions']) - 1:
+        completion['current'] = len(completion['completions']) - 1
 
-    if not ('word' in result):
-      result['word'] = '([\w]+)\Z'
+    new = completion['completions'][completion['current']]['completion']
+    return current_index, current, new
 
-    return result
+  def _complete(self, edit, completion, selection, index, current, new,
+    backward):
+    if not self._is_completion_valid(completion, selection, index, backward):
+      return
 
-  def create_empty_state(self):
-    return self._get_completion_state([''], 0, 0, None, 'asc')
+    region = sublime.Region(selection.b - len(current), selection.b)
+    self.view.replace(edit, region, new)
 
-  def _get_updated_state(self, texts, text_index, position, regexps, state,
-      desc):
+  def _highlight(self, completion):
+    regions, completions = [], completion['completions']
 
-    text = texts[text_index]
-    last_position = 'last_position' in state and state['last_position']
-    last_completion = 'completion_last' in state and state['completion_last']
+    global clean_required
+    clean_required = True
 
-    current = None
-    if last_position and last_completion:
-      current = text[last_position - len(last_completion):last_position]
+    for index, current in enumerate(completions):
+      if index == 0:
+        continue
 
-    reset_state = (
-      state is None or
-      'last_regexps' not in state or
-      state['last_regexps'] != regexps or
-      last_position != position or
-      current != last_completion
-    )
+      highlights = current['highlights']
 
-    if reset_state:
-      state = self._get_completion_state(texts, text_index, position, regexps,
-        desc)
+      self.view.add_regions('autocompletion_' + str(index), highlights)
+      if completion['backward']:
+        highlights = reversed(highlights)
 
-    state['last_regexps'] = regexps
+      regions += highlights
+      if len(regions) > 100:
+        regions = regions[:100]
+        break
 
-    if desc:
-      state['completion_position'] -= 1
-    else:
-      state['completion_position'] += 1
+    self.view.add_regions('autocompletion', regions, '?', '',
+      sublime.DRAW_EMPTY | sublime.DRAW_OUTLINED)
 
-    if state['completion_position'] < 0:
-      state['completion_position'] = 0
+  def _highlight_current(self, completion):
+    global clean_required
+    clean_required = True
 
-    if state['completion_position'] >= len(state['completions']):
-      state['completion_position'] = len(state['completions']) - 1
+    if completion['current'] == 0:
+      self.view.erase_regions('autocompletion_current')
+      return
 
-    completion = state['completions'][state['completion_position']]
-    state['completion_last'] = completion
+    highlights = self.view.get_regions('autocompletion_' +
+      str(completion['current']))
 
-    return [state, reset_state]
+    self.view.add_regions('autocompletion_current', highlights, 'string', '')
 
-  def _get_completion_state(self, texts, text_index, position, regexps, desc):
-    word = self._get_word(texts[text_index], position, regexps)
+class CancelCompletion(sublime_plugin.TextCommand):
+  def run(self, edit):
+    global completion
+    completion = None
 
-    completions_desc, completions_asc = [], []
+class ClearHighlights(sublime_plugin.EventListener):
+  def on_selection_modified_async(self, view):
+    last_command, _, _ = view.command_history(0)
+    if last_command == 'autocompletion':
+      return
 
-    if word:
-      completions_desc = self._get_completion_list(texts, text_index, position,
-        word, regexps, True)
-      completions_asc = self._get_completion_list(texts, text_index, position,
-        word, regexps, False)
+    global clean_required
+    if not clean_required:
+      return
 
-    return {
-      'position': position,
-      'word': word,
-      'completions': completions_desc + [word] + completions_asc,
-      'completion_position': len(completions_desc)
-    }
+    clean_required = False
 
-  def _get_completion_list(self, texts, text_index, position, word, regexps, desc):
-    text = self._get_joined_text(texts, text_index, position, desc)
-    return self._get_completion_list_by_word(text, word, regexps, desc)
-
-  def _get_joined_text(self, texts, text_index, position, desc = False):
-    if desc:
-      cursor_position = len(' '.join(texts[: text_index + 1])) + \
-      position - len(texts[text_index])
-      result = ' '.join(texts[: text_index + 1])[: cursor_position]
-    else:
-      result = ' '.join(texts[text_index :])[position :]
-
-    return result
-
-  def _get_completion_list_by_word(self, text, word, regexps, desc = False):
-    regexp_string = self._get_regexps(regexps)['search'].\
-      replace('__WORD__', word)
-
-    regexp = re.compile(regexp_string)
-    words = re.findall(regexp, text)
-
-    if desc:
-      words.reverse()
-
-    words = self.__uniq(words)
-
-    if desc:
-      words.reverse()
-
-    return words
-
-  def _get_word(self, text, position, regexps):
-    start_position = self._get_completion_insert_position(text, position,
-      regexps)
-
-    if start_position is None:
-      return None
-
-    return text[start_position:position]
-
-  def _get_completion_insert_position(self, text, position, regexps):
-    regexp = re.compile(self._get_regexps(regexps)['word'])
-    re_result = re.search(regexp, text[:position])
-
-    if re_result is None:
-      return None
-
-    return re_result.start(0)
-
-  def _get_insert_positions(self, text, position, regexps):
-    position_start = self._get_completion_insert_position(text, position,
-      regexps)
-
-    word_under_cursor = self._get_word(text, position, regexps)
-
-    return [position_start, position]
-
-  def __uniq(self, list):
-    seen = set()
-    return [value for value in list if value not in seen and
-      not seen.add(value)]
+    view.erase_regions('autocompletion')
+    view.erase_regions('autocompletion_current')
