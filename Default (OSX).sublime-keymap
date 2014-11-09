@@ -9,6 +9,7 @@
       "handler": "Autocompletion.word.create_fuzzy_completion",
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -21,6 +22,7 @@
       "handler": "Autocompletion.word.create_fuzzy_completion",
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -57,6 +59,7 @@
       "search": "(__WORD__(?:[a-z]+|[A-Z]+))"
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -71,6 +74,7 @@
       "search": "(__WORD__(?:[a-z]+|[A-Z]+))"
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -89,6 +93,7 @@
       "search": "(?:[^\\w/]|^)([_\\\\]*__FUZZY__)",
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -105,6 +110,7 @@
       "search": "(?:[^\\w/]|^)([_\\\\]*__FUZZY__)",
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -141,6 +147,7 @@
       "backward": false,
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -153,6 +160,7 @@
       "backward": true,
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -189,6 +197,7 @@
       "search": "(?:\\W|^)(__WORD__.*?)\n",
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -203,6 +212,7 @@
       "search": "(?:\\W|^)(__WORD__.*?)\n",
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -215,6 +225,7 @@
       "handler": "Autocompletion.word.create_fuzzy_completion",
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },
@@ -227,6 +238,7 @@
       "handler": "Autocompletion.word.create_fuzzy_completion",
     },
     "context": [
+      {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
       {"key": "overlay_visible", "operator": "equal", "operand": false},
     ],
   },

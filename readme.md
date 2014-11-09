@@ -6,7 +6,7 @@ coding.
 
 ### Demo
 
-![Demo](https://raw.github.com/shagabutdinov/sublime-autocompletion/master/demo/demo.gif "Demo")
+![Demo](https://github.com/shagabutdinov/sublime-enhanced-demos/raw/master/autocompletion.gif "Demo")
 
 
 ### Features
@@ -99,4 +99,4 @@ _local_variable same "lv" will work.
 
 ### Dependencies
 
-https://github.com/shagabutdinov/sublime-expression
+* [Expression](https://github.com/shagabutdinov/sublime-expression)
