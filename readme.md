@@ -94,7 +94,7 @@ _local_variable same "lv" will work.
 | Complete nesting forward            |                    | Autocompletion: complete nesting forward               |
 | Complete nesting backward           |                    | Autocompletion: complete nesting backward              |
 | Complete line forward               | alt+shift+p        | Autocompletion: complete line forward                  |
-| Complete line backward              | alt+shift+o        | Autocompletion: complete line forward                  |
+| Complete line backward              | alt+shift+o        | Autocompletion: complete line backward                  |
 
 
 ### Dependencies
