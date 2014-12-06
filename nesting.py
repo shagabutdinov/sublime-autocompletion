@@ -6,7 +6,7 @@ try:
   from Autocompletion.word import _set_fuzzy_expression
 except ImportError:
   sublime.error_message("Dependency import failed; please read readme for " +
-   "SnippetManager plugin for installation instructions; to disable this " +
+   "Autocompletion plugin for installation instructions; to disable this " +
    "message remove this plugin")
 
 import re
