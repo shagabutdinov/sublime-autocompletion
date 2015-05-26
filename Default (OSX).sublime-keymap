@@ -6,7 +6,7 @@
     "command": "autocompletion",
     "args": {
       "backward": false,
-      "handler": "Autocompletion.word.create_fuzzy_completion",
+      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
     },
     "context": [
       {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
@@ -19,7 +19,7 @@
     "command": "autocompletion",
     "args": {
       "backward": true,
-      "handler": "Autocompletion.word.create_fuzzy_completion",
+      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
     },
     "context": [
       {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
@@ -34,7 +34,7 @@
   //   "command": "autocompletion",
   //   "args": {
   //     "backward": false,
-  //     "handler": "Autocompletion.word.create_completion",
+  //     "handler": "AutocompletionFuzzy.word.create_completion",
   //   }
   // },
 
@@ -43,7 +43,7 @@
   //   "command": "autocompletion",
   //   "args": {
   //     "backward": true,
-  //     "handler": "Autocompletion.word.create_completion",
+  //     "handler": "AutocompletionFuzzy.word.create_completion",
   //   }
   // },
 
@@ -53,7 +53,7 @@
     "keys": ["ctrl+shift+p"],
     "command": "autocompletion",
     "args": {
-      "handler": "Autocompletion.word.create_completion",
+      "handler": "AutocompletionFuzzy.word.create_completion",
       "backward": false,
       "word": "[A-Z]?[a-z]+$|[A-Z]+$",
       "search": "(__WORD__(?:[a-z]+|[A-Z]+))"
@@ -68,7 +68,7 @@
     "keys": ["ctrl+shift+o"],
     "command": "autocompletion",
     "args": {
-      "handler": "Autocompletion.word.create_completion",
+      "handler": "AutocompletionFuzzy.word.create_completion",
       "backward": true,
       "word": "[A-Z]?[a-z]+$|[A-Z]+$",
       "search": "(__WORD__(?:[a-z]+|[A-Z]+))"
@@ -85,7 +85,7 @@
     "keys": ["ctrl+alt+p"],
     "command": "autocompletion",
     "args": {
-      "handler": "Autocompletion.word.create_fuzzy_completion",
+      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
       "backward": false,
       "word": "[\\w\\.\\\\/]+((::|->|://)[\\w\\.\\\\/\\-]+)*$",
       "delimeter": "([\\w/\\-\\.$\\\\]|::|->|://)*",
@@ -103,7 +103,7 @@
     "command": "autocompletion",
     "args": {
       "backward": true,
-      "handler": "Autocompletion.word.create_fuzzy_completion",
+      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
       "word": "[\\w\\.\\\\/]+((::|->|://)[\\w\\.\\\\/\\-]+)*$",
       "delimeter": "([\\w/\\-\\.$\\\\]|::|->|://)*",
       "last_delimeter": "([\\w/\\-\\.$\\\\]|::|->|://)*\\w",
@@ -122,7 +122,7 @@
   //   "command": "autocompletion",
   //   "args": {
   //     "backward": false,
-  //     "handler": "Autocompletion.word.create_completion",
+  //     "handler": "AutocompletionFuzzy.word.create_completion",
   //     "word": "[$\\w/\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
   //     "search": "(?:\\W|^)(__WORD__[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-$]+)*\\w)",
   //   }
@@ -131,7 +131,7 @@
   // {"keys": ["ctrl+alt+o"], "command": "autocompletion",
   //   "args": {
   //     "backward": true,
-  //     "handler": "Autocompletion.word.create_completion",
+  //     "handler": "AutocompletionFuzzy.word.create_completion",
   //     "word": "[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
   //     "search": "(?:\\W|^)(__WORD__[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-$]+)*\\w)",
   //   }
@@ -143,7 +143,7 @@
     "keys": ["alt+p"],
     "command": "autocompletion",
     "args": {
-      "handler": "Autocompletion.nesting.create_fuzzy_completion",
+      "handler": "AutocompletionFuzzy.nesting.create_fuzzy_completion",
       "backward": false,
     },
     "context": [
@@ -156,7 +156,7 @@
     "keys": ["alt+o"],
     "command": "autocompletion",
     "args": {
-      "handler": "Autocompletion.nesting.create_fuzzy_completion",
+      "handler": "AutocompletionFuzzy.nesting.create_fuzzy_completion",
       "backward": true,
     },
     "context": [
@@ -171,7 +171,7 @@
   //   "keys": ["alt+p"],
   //   "command": "autocompletion",
   //   "args": {
-  //     "handler": "Autocompletion.nesting.create_completion",
+  //     "handler": "AutocompletionFuzzy.nesting.create_completion",
   //     "backward": false,
   //   }
   // },
@@ -180,7 +180,7 @@
   //   "keys": ["alt+o"],
   //   "command": "autocompletion",
   //   "args": {
-  //     "handler": "Autocompletion.nesting.create_completion",
+  //     "handler": "AutocompletionFuzzy.nesting.create_completion",
   //     "backward": true,
   //   }
   // },
@@ -192,7 +192,7 @@
     "command": "autocompletion",
     "args": {
       "backward": false,
-      "handler": "Autocompletion.word.create_completion",
+      "handler": "AutocompletionFuzzy.word.create_completion",
       "word": "[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
       "search": "(?:\\W|^)(__WORD__.*?)\n",
     },
@@ -207,7 +207,7 @@
     "command": "autocompletion",
     "args": {
       "backward": true,
-      "handler": "Autocompletion.word.create_completion",
+      "handler": "AutocompletionFuzzy.word.create_completion",
       "word": "[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
       "search": "(?:\\W|^)(__WORD__.*?)\n",
     },
@@ -222,7 +222,7 @@
     "command": "autocompletion",
     "args": {
       "backward": false,
-      "handler": "Autocompletion.word.create_fuzzy_completion",
+      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
     },
     "context": [
       {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
@@ -235,7 +235,7 @@
     "command": "autocompletion",
     "args": {
       "backward": true,
-      "handler": "Autocompletion.word.create_fuzzy_completion",
+      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
     },
     "context": [
       {"key": "setting.sublime_enhanced_keybindings", "operator": "equal", "operand": true},
