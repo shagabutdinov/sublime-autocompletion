@@ -2,7 +2,7 @@
   // word (fuzzy)
 
   {
-    "caption": "Autocompletion: Complete word forward (fuzzy)",
+    "caption": "AutocompletionFuzzy: Complete word forward (fuzzy)",
     "command": "autocompletion",
     "args": {
       "backward": false,
@@ -11,7 +11,7 @@
   },
 
   {
-    "caption": "Autocompletion: Complete word backward (fuzzy)",
+    "caption": "AutocompletionFuzzy: Complete word backward (fuzzy)",
     "command": "autocompletion",
     "args": {
       "backward": true,
@@ -22,7 +22,7 @@
   // word (not fuzzy)
 
   {
-    "caption": "Autocompletion: Complete word forward",
+    "caption": "AutocompletionFuzzy: Complete word forward",
     "command": "autocompletion",
     "args": {
       "backward": false,
@@ -31,7 +31,7 @@
   },
 
   {
-    "caption": "Autocompletion: Complete word backward",
+    "caption": "AutocompletionFuzzy: Complete word backward",
     "command": "autocompletion",
     "args": {
       "backward": true,
@@ -42,7 +42,7 @@
   // subword
 
   {
-    "caption": "Autocompletion: Complete subword forward",
+    "caption": "AutocompletionFuzzy: Complete subword forward",
     "command": "autocompletion",
     "args": {
       "handler": "AutocompletionFuzzy.word.create_completion",
@@ -53,7 +53,7 @@
   },
 
   {
-    "caption": "Autocompletion: Complete subword backward",
+    "caption": "AutocompletionFuzzy: Complete subword backward",
     "command": "autocompletion",
     "args": {
       "handler": "AutocompletionFuzzy.word.create_completion",
@@ -66,7 +66,7 @@
   // long word (fuzzy)
 
   {
-    "caption": "Autocompletion: Complete long word forward (fuzzy)",
+    "caption": "AutocompletionFuzzy: Complete long word forward (fuzzy)",
     "command": "autocompletion",
     "args": {
       "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
@@ -79,7 +79,7 @@
   },
 
   {
-    "caption": "Autocompletion: Complete long word forward (fuzzy)",
+    "caption": "AutocompletionFuzzy: Complete long word forward (fuzzy)",
     "command": "autocompletion",
     "args": {
       "backward": true,
@@ -94,7 +94,7 @@
   // long word (not fuzzy)
 
   {
-    "caption": "Autocompletion: Complete long word forward",
+    "caption": "AutocompletionFuzzy: Complete long word forward",
     "command": "autocompletion",
     "args": {
       "backward": false,
@@ -105,7 +105,7 @@
   },
 
   {
-    "caption": "Autocompletion: Complete long word backward",
+    "caption": "AutocompletionFuzzy: Complete long word backward",
     "args": {
       "backward": true,
       "handler": "AutocompletionFuzzy.word.create_completion",
@@ -117,7 +117,7 @@
   // nesting (fuzzy)
 
   {
-    "caption": "Autocompletion: Complete nesting forward (fuzzy)",
+    "caption": "AutocompletionFuzzy: Complete nesting forward (fuzzy)",
     "command": "autocompletion",
     "args": {
       "handler": "AutocompletionFuzzy.nesting.create_fuzzy_completion",
@@ -126,7 +126,7 @@
   },
 
   {
-    "caption": "Autocompletion: Complete nesting backward (fuzzy)",
+    "caption": "AutocompletionFuzzy: Complete nesting backward (fuzzy)",
     "command": "autocompletion",
     "args": {
       "handler": "AutocompletionFuzzy.nesting.create_fuzzy_completion",
@@ -137,7 +137,7 @@
   // nesting (not fuzzy)
 
   {
-    "caption": "Autocompletion: Complete nesting forward",
+    "caption": "AutocompletionFuzzy: Complete nesting forward",
     "command": "autocompletion",
     "args": {
       "handler long": "AutocompletionFuzzy.nesting.create_completion",
@@ -146,7 +146,7 @@
   },
 
   {
-    "caption": "Autocompletion: Complete nesting backward",
+    "caption": "AutocompletionFuzzy: Complete nesting backward",
     "command": "autocompletion",
     "args": {
       "handler": "AutocompletionFuzzy.nesting.create_completion",
@@ -157,7 +157,7 @@
   // line
 
   {
-    "caption": "Autocompletion: Complete line forward",
+    "caption": "AutocompletionFuzzy: Complete line forward",
     "command": "autocompletion",
     "args": {
       "backward": false,
@@ -168,7 +168,7 @@
   },
 
   {
-    "caption": "Autocompletion: Complete line backward",
+    "caption": "AutocompletionFuzzy: Complete line backward",
     "command": "autocompletion",
     "args": {
       "backward": true,
