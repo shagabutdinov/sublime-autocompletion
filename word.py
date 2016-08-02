@@ -1,6 +1,6 @@
 import re
 
-from AutocompletionFuzzy import utility
+from Autocompletion import utility
 
 def create_completion(view, backward, word = r'[\w\-]+$',
   search = r'(?:[^\w]|^)(__WORD__[\w\-]*\w)'):
