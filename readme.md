@@ -9,6 +9,12 @@ coding.
 ![Demo](https://github.com/shagabutdinov/sublime-enhanced-demos/raw/master/autocompletion.gif "Demo")
 
 
+### Installation
+
+* Package Control: plugin is avaiable under `AutocompletionFuzzy` in sublime's `package-control`.
+* GIT: plugin should be cloned under `AutocompletionFuzzy` name.
+
+
 ### Features
 
 Provides 8 different types of autocompletion:
