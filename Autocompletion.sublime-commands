@@ -2,50 +2,50 @@
   // word (fuzzy)
 
   {
-    "caption": "AutocompletionFuzzy: Complete word forward (fuzzy)",
+    "caption": "Autocompletion: Complete word forward (fuzzy)",
     "command": "autocompletion",
     "args": {
       "backward": false,
-      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
+      "handler": "Autocompletion.word.create_fuzzy_completion",
     }
   },
 
   {
-    "caption": "AutocompletionFuzzy: Complete word backward (fuzzy)",
+    "caption": "Autocompletion: Complete word backward (fuzzy)",
     "command": "autocompletion",
     "args": {
       "backward": true,
-      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
+      "handler": "Autocompletion.word.create_fuzzy_completion",
     }
   },
 
   // word (not fuzzy)
 
   {
-    "caption": "AutocompletionFuzzy: Complete word forward",
+    "caption": "Autocompletion: Complete word forward",
     "command": "autocompletion",
     "args": {
       "backward": false,
-      "handler": "AutocompletionFuzzy.word.create_completion",
+      "handler": "Autocompletion.word.create_completion",
     }
   },
 
   {
-    "caption": "AutocompletionFuzzy: Complete word backward",
+    "caption": "Autocompletion: Complete word backward",
     "command": "autocompletion",
     "args": {
       "backward": true,
-      "handler": "AutocompletionFuzzy.word.create_completion",
+      "handler": "Autocompletion.word.create_completion",
     }
   },
 
   // subword
 
   {
-    "caption": "AutocompletionFuzzy: Complete subword forward",
+    "caption": "Autocompletion: Complete subword forward",
     "command": "autocompletion",
     "args": {
-      "handler": "AutocompletionFuzzy.word.create_completion",
+      "handler": "Autocompletion.word.create_completion",
       "backward": false,
       "word": "[A-Z]?[a-z]+$|[A-Z]+$",
       "search": "(__WORD__(?:[a-z]+|[A-Z]+))"
@@ -53,10 +53,10 @@
   },
 
   {
-    "caption": "AutocompletionFuzzy: Complete subword backward",
+    "caption": "Autocompletion: Complete subword backward",
     "command": "autocompletion",
     "args": {
-      "handler": "AutocompletionFuzzy.word.create_completion",
+      "handler": "Autocompletion.word.create_completion",
       "backward": true,
       "word": "[A-Z]?[a-z]+$|[A-Z]+$",
       "search": "(__WORD__(?:[a-z]+|[A-Z]+))"
@@ -66,10 +66,10 @@
   // long word (fuzzy)
 
   {
-    "caption": "AutocompletionFuzzy: Complete long word forward (fuzzy)",
+    "caption": "Autocompletion: Complete long word forward (fuzzy)",
     "command": "autocompletion",
     "args": {
-      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
+      "handler": "Autocompletion.word.create_fuzzy_completion",
       "backward": false,
       "word": "[\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
       "delimeter": "([\\w/\\-\\.$\\\\]|::|->)*",
@@ -79,11 +79,11 @@
   },
 
   {
-    "caption": "AutocompletionFuzzy: Complete long word forward (fuzzy)",
+    "caption": "Autocompletion: Complete long word forward (fuzzy)",
     "command": "autocompletion",
     "args": {
       "backward": true,
-      "handler": "AutocompletionFuzzy.word.create_fuzzy_completion",
+      "handler": "Autocompletion.word.create_fuzzy_completion",
       "word": "[\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
       "delimeter": "([\\w/\\-\\.$\\\\]|::|->)*",
       "last_delimeter": "([\\w/\\-\\.$\\\\]|::|->)*\\w",
@@ -94,21 +94,21 @@
   // long word (not fuzzy)
 
   {
-    "caption": "AutocompletionFuzzy: Complete long word forward",
+    "caption": "Autocompletion: Complete long word forward",
     "command": "autocompletion",
     "args": {
       "backward": false,
-      "handler": "AutocompletionFuzzy.word.create_completion",
+      "handler": "Autocompletion.word.create_completion",
       "word": "[$\\w/\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
       "search": "(?:\\W|^)(__WORD__[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-$]+)*\\w)",
     }
   },
 
   {
-    "caption": "AutocompletionFuzzy: Complete long word backward",
+    "caption": "Autocompletion: Complete long word backward",
     "args": {
       "backward": true,
-      "handler": "AutocompletionFuzzy.word.create_completion",
+      "handler": "Autocompletion.word.create_completion",
       "word": "[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
       "search": "(?:\\W|^)(__WORD__[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-$]+)*\\w)"
     }
@@ -117,19 +117,19 @@
   // nesting (fuzzy)
 
   {
-    "caption": "AutocompletionFuzzy: Complete nesting forward (fuzzy)",
+    "caption": "Autocompletion: Complete nesting forward (fuzzy)",
     "command": "autocompletion",
     "args": {
-      "handler": "AutocompletionFuzzy.nesting.create_fuzzy_completion",
+      "handler": "Autocompletion.nesting.create_fuzzy_completion",
       "backward": false,
     }
   },
 
   {
-    "caption": "AutocompletionFuzzy: Complete nesting backward (fuzzy)",
+    "caption": "Autocompletion: Complete nesting backward (fuzzy)",
     "command": "autocompletion",
     "args": {
-      "handler": "AutocompletionFuzzy.nesting.create_fuzzy_completion",
+      "handler": "Autocompletion.nesting.create_fuzzy_completion",
       "b longackward": true,
     }
   },
@@ -137,19 +137,19 @@
   // nesting (not fuzzy)
 
   {
-    "caption": "AutocompletionFuzzy: Complete nesting forward",
+    "caption": "Autocompletion: Complete nesting forward",
     "command": "autocompletion",
     "args": {
-      "handler long": "AutocompletionFuzzy.nesting.create_completion",
+      "handler long": "Autocompletion.nesting.create_completion",
       "backward": false,
     }
   },
 
   {
-    "caption": "AutocompletionFuzzy: Complete nesting backward",
+    "caption": "Autocompletion: Complete nesting backward",
     "command": "autocompletion",
     "args": {
-      "handler": "AutocompletionFuzzy.nesting.create_completion",
+      "handler": "Autocompletion.nesting.create_completion",
       "backward": true,
     }
   },
@@ -157,22 +157,22 @@
   // line
 
   {
-    "caption": "AutocompletionFuzzy: Complete line forward",
+    "caption": "Autocompletion: Complete line forward",
     "command": "autocompletion",
     "args": {
       "backward": false,
-      "handler": "AutocompletionFuzzy.word.create_completion",
+      "handler": "Autocompletion.word.create_completion",
       "word": "[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
       "search": "(?:\\W|^)(__WORD__.*?)\n",
     }
   },
 
   {
-    "caption": "AutocompletionFuzzy: Complete line backward",
+    "caption": "Autocompletion: Complete line backward",
     "command": "autocompletion",
     "args": {
       "backward": true,
-      "handler": "AutocompletionFuzzy.word.create_completion",
+      "handler": "Autocompletion.word.create_completion",
       "word": "[$\\w\\.\\\\/]+((::|->)[\\w\\.\\\\/\\-]+)*$",
       "search": "(?:\\W|^)(__WORD__.*?)\n",
     }

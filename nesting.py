@@ -2,8 +2,8 @@ import sublime
 
 try:
   from Expression import expression
-  from AutocompletionFuzzy import utility
-  from AutocompletionFuzzy.word import _set_fuzzy_expression
+  from Autocompletion import utility
+  from Autocompletion.word import _set_fuzzy_expression
 except ImportError as error:
   sublime.error_message("Dependency import failed; please read readme for " +
    "Autocompletion plugin for installation instructions; to disable this " +
